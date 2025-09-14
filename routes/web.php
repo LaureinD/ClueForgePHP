@@ -1,8 +1,23 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('/', function () {
-    return inertia::render('Home');
+    return inertia('frontend/Home');
+});
+
+Route::get('/help', function () {
+    return inertia('frontend/Help');
+});
+
+Route::get('/contact', function () {
+    return inertia('frontend/Contact');
+});
+
+Route::get('/pricing', function () {
+    return inertia('frontend/Pricing');
+});
+
+Route::get('/why-ClueForge', function () {
+    return inertia('frontend/WhyClueForge');
 });
