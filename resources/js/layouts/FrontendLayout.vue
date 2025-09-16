@@ -1,9 +1,13 @@
-<script setup lang="ts">
-import NavBar from "@/components/frontend/NavBar.vue";
-import Footer from "@/components/frontend/Footer.vue";
+<script setup>
+    import NavBar from "@/components/frontend/NavBar.vue";
+    import Footer from "@/components/frontend/Footer.vue";
 </script>
 
 <template>
+    <Head>
+        <meta name="description" content="Create your own Escape Rooms!" />
+    </Head>
+
     <div class="w-full min-h-screen bg-background font-wix">
         <div id="wrapper" class="bg-surface w-[1320px] mx-auto min-h-screen flex flex-col">
 

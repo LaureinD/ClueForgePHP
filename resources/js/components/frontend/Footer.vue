@@ -1,8 +1,14 @@
+<script setup lang="ts">
+    import Logo from "@/components/other/Logo.vue";
+
+    const currentYear: number = new Date().getFullYear();
+</script>
+
 <template>
     <footer class="w-full px-6 py-12 flex flex-col min-h-[500px] shadow-top shadow-background border-t border-background bg-accent-light">
         <div class="flex-1 flex flex-col gap-12 px-6 mb-32">
             <div class="w-full flex justify-between gap-16 items-center">
-                <p>LOGO</p>
+                <Logo :imageSize="30" textSize="text-2xl" href="home"></Logo>
 
                 <div class="flex flex-1 gap-2 items-center">
                     <p>Choose a language</p>
@@ -90,7 +96,3 @@
         </div>
     </footer>
 </template>
-
-<script setup lang="ts">
-    const currentYear: number = new Date().getFullYear();
-</script>

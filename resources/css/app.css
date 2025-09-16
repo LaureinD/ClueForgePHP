@@ -82,3 +82,41 @@
     font-style: italic;
     font-display: swap;
 }
+
+@layer utilities {
+    .bg-brush-primary {
+        background-image: url("/assets/img/backgrounds/brush-primary.svg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .bg-brush-success {
+        background-image: url("/assets/img/backgrounds/brush-success.svg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .bg-brush-warning {
+        background-image: url("/assets/img/backgrounds/brush-warning.svg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .bg-brush-danger {
+        background-image: url("/assets/img/backgrounds/brush-danger.svg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .z-999 {
+        z-index: 999;
+    }
+
+    .shadow-bottom {
+        box-shadow: 0 1px 0 0 rgba(0,0,0,0.3);
+    }
+}

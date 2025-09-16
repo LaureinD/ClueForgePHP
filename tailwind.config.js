@@ -21,7 +21,7 @@ export default {
                 "secondary-light": "#E3E8ED",
                 "accent": "#4ECAC2",
                 "accent-light": "#DCF4F3",
-                "background": "#EFEFEF",
+                "background": "#f4f4f4",
                 "surface": "#FFFFFF",
                 "text-primary": "#1C1C27",
                 "text-muted": "#6B7280",
