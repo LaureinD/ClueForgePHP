@@ -3,8 +3,10 @@
     import TextInput from "@/components/ui/TextInput.vue";
     import {Link, useForm} from '@inertiajs/vue3'
     import Button from "@/components/ui/Button.vue";
+    import DropzoneSingleImage from "@/components/ui/DropzoneImageSingle.vue";
 
     const form = useForm({
+        avatar: null,
         first_name: null,
         last_name: null,
         email: null,
@@ -35,7 +37,13 @@
             <p>Sign up and start creating unique escape rooms!</p>
         </div>
 
-        <form @submit.prevent="submitRegisterForm" class="flex flex-col gap-y-4 max-w-lg mx-auto my-20">
+        <button @click="console.log(form)">Log</button>
+
+        <form @submit.prevent="submitRegisterForm" class="flex flex-col gap-y-4 max-w-lg mx-auto mb-20">
+            <div class="flex flex-col items-center">
+                <DropzoneSingleImage v-model="form.avatar" rounded="full" />
+                <p v-if="form.errors.avatar" class="text-danger text-sm">{{ form.errors.avatar }}</p>
+            </div>
 <!--            CSRF protection included bij Inertia useform()-->
             <div class="grid grid-cols-2 gap-3">
                 <TextInput v-model="form.first_name" name="First Name" type="text" autocomplete="given-name" required :message="form.errors.first_name" />

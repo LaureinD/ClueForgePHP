@@ -30,7 +30,8 @@
 
                 <Button @click="userMenuOpen = !userMenuOpen" type="button" color="surface" size="fit" class="w-full">
                     <div class="flex gap-3 px-4 py-2 items-center">
-                        <div class="w-fit rounded-full p-3 bg-accent text-surface">
+                        <img v-if="$page.props.auth.avatar" :src="`assets/${$page.props.auth.avatar.path}`" :alt="$page.props.auth.avatar.alt" class="size-10 rounded-full">
+                        <div v-else class="size-10 rounded-full flex items-center justify-center bg-accent text-surface">
                             <p class="uppercase text-xl font-semibold size-2 flex items-center justify-center"> {{ $page.props.auth.user ? $page.props.auth.user.first_name[0] :'?' }} </p>
                         </div>
                         <p class="font-medium"> {{ $page.props.auth.user? `${$page.props.auth.user?.first_name} ${$page.props.auth.user?.last_name}` : 'Unknown' }} </p>

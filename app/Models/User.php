@@ -47,4 +47,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function images() {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
+    public function avatar() {
+        return $this->morphOne(Image::class, 'imageable')->where('is_primary', true);
+    }
 }
