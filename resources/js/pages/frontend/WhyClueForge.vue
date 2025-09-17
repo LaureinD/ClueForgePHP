@@ -16,7 +16,7 @@
 
             <div class="p-8 flex flex-col gap-6">
                 <Button type="link" href="auth.register" size="md" color="success">Get ClueForge for free!</Button>
-                <Link :href="route('auth.login')">Already have an account? <span class="text-accent">Log in.</span></Link>
+                <Link :href="route('login')">Already have an account? <span class="text-accent">Log in.</span></Link>
             </div>
         </div>
 

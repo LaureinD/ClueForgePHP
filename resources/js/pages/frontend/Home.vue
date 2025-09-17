@@ -19,7 +19,7 @@ import {Link} from '@inertiajs/vue3';
                     Get ClueForge for free!
                 </Button>
 
-                <Link :href="route('auth.login')">Already have an account? <span class="text-accent">Log In</span>.</Link>
+                <Link :href="route('login')">Already have an account? <span class="text-accent">Log In</span>.</Link>
             </div>
         </div>
 

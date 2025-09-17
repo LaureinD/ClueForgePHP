@@ -14,7 +14,7 @@
     });
 
     const submitRegisterForm = () => {
-        form.post(route('auth.register'), {
+        form.post(route('register'), {
             onError: () => form.reset('password', 'password_confirmation', 'acceptTerms')
         });
     };
@@ -57,7 +57,7 @@
             </div>
 
             <div class="flex justify-between items-end mt-6">
-                <Link :href="route('auth.login')" class="text-center">Already have an account? <span class="text-accent">Log in.</span></Link>
+                <Link :href="route('login')" class="text-center">Already have an account? <span class="text-accent">Log in.</span></Link>
                 <Button type="submit" size="md" color="success" :disabled="form.processing"> {{ form.processing ? 'Registering' : 'Register' }} </Button>
             </div>
         </form>

@@ -11,7 +11,7 @@ const form = useForm({
 });
 
 const submitLoginForm = () => {
-    form.post(route('auth.login'), {
+    form.post(route('login'), {
         onError: () => form.reset('password', 'rememberMe')
     });
 };
@@ -45,7 +45,7 @@ const submitLoginForm = () => {
             </div>
 
             <div class="flex justify-between items-end mt-6">
-                <Link :href="route('auth.register')" class="text-center">Don't have an account yet? <span class="text-accent">Register here.</span></Link>
+                <Link :href="route('register')" class="text-center">Don't have an account yet? <span class="text-accent">Register here.</span></Link>
                 <Button type="submit" size="md" color="success" :disabled="form.processing"> {{ form.processing ? 'Logging in' : 'Login' }} </Button>
             </div>
         </form>
