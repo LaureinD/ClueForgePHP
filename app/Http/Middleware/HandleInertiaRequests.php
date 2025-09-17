@@ -40,8 +40,10 @@ class HandleInertiaRequests extends Middleware
            'auth.user' =>  fn () => $request->user()
                ? $request->user()->only('id','first_name','last_name','email')
                : null,
-            'auth.avatar' => fn () => $request->user() && Storage::disk('public')->exists($request->user()->avatar()->first()->path)
-                ? $request->user()->avatar()->first()->only('path', 'alt')
+            'auth.avatar' => fn () => $request->user()
+                ? ($avatar = $request->user()->avatar()) && Storage::disk('public')->exists($avatar->path)
+                    ? $avatar->only('path', 'alt')
+                    : null
                 : null,
         ]);
     }

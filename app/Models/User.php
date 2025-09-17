@@ -53,6 +53,6 @@ class User extends Authenticatable
     }
 
     public function avatar() {
-        return $this->morphOne(Image::class, 'imageable')->where('is_primary', true);
+        return $this->morphOne(Image::class, 'imageable')->where('is_primary', true)->first();
     }
 }

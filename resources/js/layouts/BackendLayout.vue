@@ -1,10 +1,10 @@
 <script setup>
-import NavBar from "@/components/backend/NavBar.vue";
+import NavBarApp from "@/components/backend/NavBarApp.vue";
 </script>
 
 <template>
     <div class="w-full min-h-screen bg-background flex justify-end">
-        <NavBar />
+        <NavBarApp />
 
         <main class="flex-grow h-screen overflow-hidden p-6">
             <slot />

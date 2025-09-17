@@ -3,6 +3,7 @@
     import { Link } from '@inertiajs/vue3';
     import Button from "@/components/ui/Button.vue";
     import Logo from "@/components/other/Logo.vue";
+    import Avatar from "@/components/backend/Avatar.vue";
 
     const userMenuOpen = ref(false);
 
@@ -15,7 +16,9 @@
         <div class="w-full flex flex-grow flex-col justify-between items-center">
             <div class="flex flex-col gap-3 items-center">
                 <p>Home</p>
-                <p>User</p>
+                <p>Riddles</p>
+                <p>Escape rooms</p>
+                <p>Library</p>
             </div>
 
             <div class="relative w-full">
@@ -30,10 +33,7 @@
 
                 <Button @click="userMenuOpen = !userMenuOpen" type="button" color="surface" size="fit" class="w-full">
                     <div class="flex gap-3 px-4 py-2 items-center">
-                        <img v-if="$page.props.auth.avatar" :src="`assets/${$page.props.auth.avatar.path}`" :alt="$page.props.auth.avatar.alt" class="size-10 rounded-full">
-                        <div v-else class="size-10 rounded-full flex items-center justify-center bg-accent text-surface">
-                            <p class="uppercase text-xl font-semibold size-2 flex items-center justify-center"> {{ $page.props.auth.user ? $page.props.auth.user.first_name[0] :'?' }} </p>
-                        </div>
+                        <Avatar />
                         <p class="font-medium"> {{ $page.props.auth.user? `${$page.props.auth.user?.first_name} ${$page.props.auth.user?.last_name}` : 'Unknown' }} </p>
                     </div>
                 </Button>
