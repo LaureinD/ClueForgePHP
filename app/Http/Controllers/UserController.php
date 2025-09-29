@@ -3,39 +3,45 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $baseQuery = User::with('avatar');
+        $now = Carbon::now();
+        $last30Days = $now->copy()->subDays(30);
+        $last6Months = $now->copy()->subMonths(6);
 
-        $userCount = (clone $baseQuery)->count();
-        $newUserCount = (clone $baseQuery)
-            ->where('created_at', '>=', Carbon::now()->subDays(30))
+        $userCount = User::count();
+        $newUserCount = User::where('created_at', '>=', $last30Days)
             ->count();
-        $activeUserCount = (clone $baseQuery)
-            ->where('last_login', '>=', Carbon::now()->subDays(30))
+        $activeUserCount = User::where('last_login', '>=', $last30Days)
             ->count();
-        $retentionCount = (clone $baseQuery)
-            ->whereRaw('created_at >= NOW() - INTERVAL 30 DAY AND last_login > created_at + INTERVAL 14 DAY')
+        $retentionBase = User::where('created_at', '>=', $last6Months)
             ->count();
-        $retentionRate = $newUserCount > 0
-            ? number_format((($retentionCount / $newUserCount) * 100), 2,'.',' ')
+        $retentionCount = User::where('created_at', '>=', $last6Months)
+            ->whereRaw('last_login >= DATE_ADD(created_at, INTERVAL 14 DAY)')
+            ->count();
+
+        $retentionRate = $retentionBase > 0
+            ? round(($retentionCount / $retentionBase) * 100, 1)
             : 0;
-        $usersPaginated = (clone $baseQuery)->paginate(10);
+
+        $users = User::with('avatar')
+            ->paginate(10);
 
         return inertia('admin/users/Index', [
-            'users'          => $usersPaginated,
-            'userCount'      => $userCount,
-            'newUserCount'   => $newUserCount,
-            'activeUserCount'=> $activeUserCount,
-            'retentionRate'  => $retentionRate,
+            'KPI' => [
+                'userCount' => $userCount,
+                'newUserCount' => $newUserCount,
+                'activeUserCount' => $activeUserCount,
+                'retentionRate' => $retentionRate,
+            ],
+            'users' => $users,
         ]);
     }
-
 
     public function store() {
 

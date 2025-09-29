@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -24,24 +24,19 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $start = Carbon::now()->subYear();
-        $end = Carbon::now();
-        $timestamp = mt_rand($start->timestamp, $end->timestamp);
-        $randomDate = Carbon::createFromTimestamp($timestamp);
-
-        $timestamp = mt_rand($timestamp, $end->timestamp);
-        $last_login = Carbon::createFromTimestamp($timestamp);
+        $created_at = Carbon::now()->subDays(rand(0,365));
+        $last_login = Carbon::createFromTimestamp(rand($created_at->timestamp, Carbon::now()->timestamp));
 
         return [
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            'last_login' => $last_login,
+            'email_verified_at' => rand(0,1) === 1? $created_at : null,
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            'last_login' => $last_login,
-            'created_at' => $randomDate,
-            'updated_at' => $randomDate,
+            'created_at' => $created_at,
+            'updated_at' => $last_login,
         ];
     }
 

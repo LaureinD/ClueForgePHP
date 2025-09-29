@@ -14,6 +14,7 @@ Route::prefix('/')->group(function () {
 });
 
 //  AUTH ROUTES
+// todo: redirect when already logged in.
 Route::prefix('/')->group(function () {
     Route::get('/register', function () { return inertia('frontend/auth/Register'); })->name('register');
     Route::post('/register', [AuthController::class, 'register']);

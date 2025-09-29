@@ -5,8 +5,16 @@ import {
     InformationCircleIcon,
     UserGroupIcon,
     UserIcon,
-    UserPlusIcon
+    UserPlusIcon,
+    RectangleGroupIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
+    ChevronUpIcon,
+    ChevronDownIcon,
+    CheckIcon,
+    XMarkIcon,
 } from "@heroicons/vue/24/outline/index.js";
+import {sizeMap} from "@/utils/tailwindSizeMapping.js";
 
     const props = defineProps({
         icon: {
@@ -33,11 +41,27 @@ import {
         'userPlus': UserPlusIcon,
         'arrowPath': ArrowPathIcon,
         'informationCircle': InformationCircleIcon,
+        'rectangleGroup': RectangleGroupIcon,
+        'chevronLeft': ChevronLeftIcon,
+        'chevronRight': ChevronRightIcon,
+        'chevronUp': ChevronUpIcon,
+        'chevronDown': ChevronDownIcon,
+        'check': CheckIcon,
+        'x': XMarkIcon,
     };
+
 </script>
 
 <template>
-    <div v-if="icons[props.icon]" :class="`flex justify-center items-center ${props.boxSize ? `size-${props.boxSize}` : ''} rounded${props.rounded ? `-${props.rounded}`: ''} ${$attrs.class}`">
-        <component :is="icons[props.icon]" :class="`size-${props.size}`"  />
+    <div
+        v-if="icons[props.icon]"
+        :class="[
+            'flex justify-center items-center',
+            props.boxSize ? sizeMap[props.boxSize] : '',
+            props.rounded ? `rounded-${props.rounded}` : '',
+            $attrs.class
+        ]"
+    >
+        <component :is="icons[props.icon]" :class="props.size ? sizeMap[props.size] : ''" />
     </div>
 </template>

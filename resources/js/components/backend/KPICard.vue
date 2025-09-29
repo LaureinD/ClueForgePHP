@@ -1,5 +1,8 @@
 <script setup>
     import Icon from "@/components/other/Icon.vue";
+    import {nextTick, onBeforeUnmount, onMounted, ref} from "vue";
+    import {createPopper} from "@popperjs/core";
+    import CustomTooltip from "@/components/other/CustomTooltip.vue";
 
     const props = defineProps({
         title: {
@@ -9,6 +12,10 @@
         value: {
             type: [String, Number],
             required: true,
+        },
+        unit: {
+            type: String,
+            default: null
         },
         tooltip: {
             type: String,
@@ -55,6 +62,34 @@
         'danger': 'bg-danger-light text-danger',
     }
 
+    const infoIcon = ref(null);
+    const tooltip = ref(null);
+    let popperInstance = null;
+
+    onMounted(async () => {
+        if (props.tooltip) {
+            await nextTick();
+
+            if (infoIcon.value && tooltip.value) {
+                popperInstance = createPopper(infoIcon.value, tooltip.value, {
+                    placement: "bottom",
+                    modifiers: [
+                        { name: "offset", options: { offset: [0,8] } },
+                        { name: "preventOverflow", options: { boundary: "viewport" } },
+                        { name: "flip" }
+                    ]
+                })
+            }
+        }
+    });
+
+    onBeforeUnmount(() => {
+        if (popperInstance) {
+            popperInstance.destroy();
+            popperInstance = null;
+        }
+    })
+
 </script>
 
 <template>
@@ -64,20 +99,21 @@
         <div class="flex-grow flex flex-col text-right">
             <p class="text-xl font-semibold my-1">
                 {{
-                    typeof props.value === 'number'
+                    (typeof props.value === 'number'
                         ? new Intl.NumberFormat('nl-BE').format(value)
-                        : value
+                        : value)
+                    + (props.unit ? ` ${props.unit}` : '')
+
                 }}
             </p>
 
             <div class="flex gap-3 w-full justify-end items-center text-text-muted">
                 <p> {{ props.title }} </p>
-                <div v-if="props.tooltip" class="relative group size-5">
-                    <Icon icon="informationCircle" :size="6" class="text-text-muted" />
-                    <div class="absolute top-full left-0 z-50 w-32 p-3 shadow-xl rounded overflow-hidden hidden group-hover:block text-left bg-background whitespace-normal mt-1">
-                        <p class="text-xs text-text-primary"> {{ props.tooltip }} </p>
-                    </div>
-                </div>
+                <CustomTooltip :content="props.tooltip" placement="bottom">
+                    <template #trigger>
+                        <Icon icon="informationCircle" :size="5" class="text-text-muted" ref="infoIcon" />
+                    </template>
+                </CustomTooltip>
             </div>
         </div>
     </div>
