@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
                 'remember_token' => Str::random(10),
+                'last_login' => now(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -33,11 +34,20 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
                 'remember_token' => Str::random(10),
+                'last_login' => now(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
         ]);
 
         User::factory(50)->create();
+        $admin = User::where('id',1)->first();
+        $admin->images()->create([
+            'path' => 'img/avatars/Laurein_Demeyere.png',
+            'alt' => 'admin avatar',
+            'type' => 'image/png',
+            'size' => 0,
+            'is_primary' => true,
+        ]);
     }
 }

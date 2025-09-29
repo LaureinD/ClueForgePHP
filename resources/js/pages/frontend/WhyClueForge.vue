@@ -15,7 +15,7 @@
                 By organizing the entire creation process in a clear and intuitive way, you can focus on crafting engaging puzzles.</h2>
 
             <div class="p-8 flex flex-col gap-6">
-                <Button type="link" href="auth.register" size="md" color="success">Get ClueForge for free!</Button>
+                <Button type="link" href="register" size="md" color="success">Get ClueForge for free!</Button>
                 <Link :href="route('login')">Already have an account? <span class="text-accent">Log in.</span></Link>
             </div>
         </div>
