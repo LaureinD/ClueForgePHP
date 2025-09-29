@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('path');
             $table->string('alt');
             $table->string('type');
-            $table->unsignedBigInteger('size (b)');
+            $table->unsignedBigInteger('size');
             $table->morphs('imageable');
             $table->boolean('is_primary')->default(false);
             $table->timestamps();

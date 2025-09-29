@@ -33,7 +33,7 @@
 
                 <Button @click="userMenuOpen = !userMenuOpen" type="button" color="surface" size="fit" class="w-full">
                     <div class="flex gap-3 px-4 py-2 items-center">
-                        <Avatar />
+                        <Avatar :path="$page.props.auth.avatar?.path" :alt="$page.props.auth.avatar?.alt" :size="10" :userFirstName="$page.props.auth.user?.first_name" />
                         <p class="font-medium"> {{ $page.props.auth.user? `${$page.props.auth.user?.first_name} ${$page.props.auth.user?.last_name}` : 'Unknown' }} </p>
                     </div>
                 </Button>

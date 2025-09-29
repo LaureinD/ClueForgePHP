@@ -37,14 +37,21 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-           'auth.user' =>  fn () => $request->user()
-               ? $request->user()->only('id','first_name','last_name','email')
-               : null,
-            'auth.avatar' => fn () => $request->user()
-                ? ($avatar = $request->user()->avatar()) && Storage::disk('public')->exists($avatar->path)
-                    ? $avatar->only('path', 'alt')
-                    : null
-                : null,
+            'auth.user' => function () use ($request) {
+                $user = $request->user();
+                if (!$user) return null;
+
+                return $user->only('id', 'first_name', 'last_name', 'email');
+            },
+            'auth.avatar' => function () use ($request) {
+                $user = $request->user();
+                if (!$user) return null;
+
+                $avatar = $user->avatar;
+                if (!$avatar || !Storage::disk('public')->exists($avatar->path)) return null;
+
+                return $avatar->only('path', 'alt');
+            },
         ]);
     }
 }
