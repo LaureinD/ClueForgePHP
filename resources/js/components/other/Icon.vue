@@ -13,8 +13,18 @@ import {
     ChevronDownIcon,
     CheckIcon,
     XMarkIcon,
+    CheckCircleIcon,
+    XCircleIcon,
+    ExclamationTriangleIcon,
+    TrashIcon,
 } from "@heroicons/vue/24/outline/index.js";
-import {sizeMap} from "@/utils/tailwindSizeMapping.js";
+import {
+    CheckCircleIcon as CheckCircleIconSolid,
+    XCircleIcon as XCircleIconSolid,
+    ExclamationTriangleIcon as ExclamationTriangleIconSolid,
+    InformationCircleIcon as InformationCircleIconSolid,
+} from "@heroicons/vue/24/solid/index.js";
+import {sizeMap, strokeMap} from "@/utils/tailwindSizeMapping.js";
 
     const props = defineProps({
         icon: {
@@ -32,6 +42,10 @@ import {sizeMap} from "@/utils/tailwindSizeMapping.js";
         rounded: {
             type: String,
             default: null,
+        },
+        strokeWidth: {
+            type: [Number, String],
+            default: 1.5
         }
     })
 
@@ -41,13 +55,21 @@ import {sizeMap} from "@/utils/tailwindSizeMapping.js";
         'userPlus': UserPlusIcon,
         'arrowPath': ArrowPathIcon,
         'informationCircle': InformationCircleIcon,
+        'informationCircleSolid': InformationCircleIconSolid,
         'rectangleGroup': RectangleGroupIcon,
         'chevronLeft': ChevronLeftIcon,
         'chevronRight': ChevronRightIcon,
         'chevronUp': ChevronUpIcon,
         'chevronDown': ChevronDownIcon,
         'check': CheckIcon,
+        'checkCircle': CheckCircleIcon,
+        'checkCircleSolid': CheckCircleIconSolid,
         'x': XMarkIcon,
+        'xCircle': XCircleIcon,
+        'xCircleSolid': XCircleIconSolid,
+        'warning': ExclamationTriangleIcon,
+        'warningSolid': ExclamationTriangleIconSolid,
+        'trash': TrashIcon,
     };
 
 </script>
@@ -62,6 +84,12 @@ import {sizeMap} from "@/utils/tailwindSizeMapping.js";
             $attrs.class
         ]"
     >
-        <component :is="icons[props.icon]" :class="props.size ? sizeMap[props.size] : ''" />
+        <component
+            :is="icons[props.icon]"
+            :class="[
+                props.size ? sizeMap[props.size] : '',
+                strokeMap[props.strokeWidth],
+            ]"
+        />
     </div>
 </template>

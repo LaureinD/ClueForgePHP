@@ -35,3 +35,26 @@ export const sizeMap = {
     80: "w-80 h-80",
     96: "w-96 h-96",
 };
+
+export const strokeMap = {
+    0: "stroke-0",
+    1: "stroke-1",
+    1.1: "stroke-[1.1]",
+    1.2: "stroke-[1.2]",
+    1.3: "stroke-[1.3]",
+    1.4: "stroke-[1.4]",
+    1.5: "stroke-[1.5]",
+    1.6: "stroke-[1.6]",
+    1.7: "stroke-[1.7]",
+    1.8: "stroke-[1.8]",
+    1.9: "stroke-[1.9]",
+    2: "stroke-2",
+    3: "stroke-3",
+    4: "stroke-4",
+    5: "stroke-5",
+    6: "stroke-6",
+    7: "stroke-7",
+    8: "stroke-8",
+    9: "stroke-9",
+    10: "stroke-10",
+};

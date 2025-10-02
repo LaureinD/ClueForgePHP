@@ -48,14 +48,9 @@ class AuthController extends Controller
         //todo: add email confirmation
         Auth::login($user);
 
-        //todo: add proper role/permission check
-        if ($user->id === 1) {
-            return redirect()->route('admin.dashboard');
-
-        } else {
-            return redirect()->route('app.dashboard');
-
-        }
+        return redirect()
+                ->route('admin.dashboard')
+                ->with('success',['message' => "Welcome $user->first_name, \n Your account was created successfully!",]);
     }
 
     public function login(Request $request) {
@@ -69,17 +64,19 @@ class AuthController extends Controller
 
             //todo: add proper role/permission check
             if (Auth()->user()?->id === 1) {
-                return redirect()->route('admin.dashboard');
+                return redirect()
+                        ->route('admin.dashboard')
+                        ->with('success',['message' => "Welcome ".Auth()->user()?->first_name.", \n Successfully logged in to the admin panel!",]);
 
             } else {
-                return redirect()->route('app.dashboard');
+                return redirect()
+                        ->route('app.dashboard')
+                        ->with('success',['message' => "Welcome ".Auth()->user()?->first_name.", \n Successfully logged in to ClueForge!",]);
 
             }
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials don\'t match our records.'
-        ])->onlyInput('email');
+        return back()->withErrors(['email' => 'The provided credentials don\'t match our records.'])->onlyInput('email');
     }
 
     public function logout(Request $request) {

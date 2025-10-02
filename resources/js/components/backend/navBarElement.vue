@@ -29,7 +29,7 @@
 <template>
     <Link :href="route($props.routeName)" :class="$page.component === $props.pageName ? 'border-b-accent' : 'border-b-surface'" class="w-full flex justify-between items-center border-b-4 py-2">
         <div class="flex gap-3 items-center">
-            <Icon :icon="$props.iconName" :size="$props.iconSize" />
+            <Icon :icon="$props.iconName" :size="$props.iconSize" :stroke-width="1.2" />
             <p class="text-lg">{{ props.label }}</p>
         </div>
         <Icon icon="chevronRight" :size="4" />

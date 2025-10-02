@@ -1,4 +1,5 @@
 <script setup>
+
     const model = defineModel({
         type: null,
         required: true
@@ -10,7 +11,7 @@
             required: true,
             default: 'text',
             validator(value) {
-                return ['text', 'email', 'password'].includes(value);
+                return ['text', 'email', 'password', 'search'].includes(value);
             }
         },
         name: {
@@ -27,19 +28,28 @@
         message: {
             type: String,
             default: null,
-        }
+        },
+        showLabel: {
+            type: Boolean,
+            default: true
+        },
+        placeholder: {
+            type: String,
+            default: null,
+        },
     })
 </script>
 
 <template>
-    <div class="flex flex-col gap-1">
-        <label :for="props.name"> {{ props.name }} <span v-if="props.required" class="text-sm align-text-top text-danger"> *</span> </label>
+    <div class="flex flex-col gap-1" :class="$attrs['class']">
+        <label :for="props.name" v-if="props.showLabel"> {{ props.name }} <span v-if="props.required" class="text-sm align-text-top text-danger"> *</span> </label>
         <input
             v-model="model"
             :type="props.type"
             :id="props.name"
             :name="props.name"
             :autocomplete="props.autocomplete"
+            :placeholder="props.placeholder"
             :required="props.required"
             :class="`border rounded border-secondary py-2 px-3 focus:outline-accent ${$attrs.class}`"
         >

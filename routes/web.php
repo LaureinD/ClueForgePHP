@@ -34,7 +34,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified'])->prefix('/admin')->group(function () {
     Route::get('/', function () { return inertia('admin/Dashboard'); })->name('admin.dashboard');
 
-    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::prefix('/users')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('users.index');
+        Route::delete('/bulk-delete', [UserController::class, 'bulkDelete'])->name('users.bulkDelete');
+        Route::post('/bulk-restore', [UserController::class, 'bulkRestore'])->name('users.bulkRestore');
+    });
 });
 
 
