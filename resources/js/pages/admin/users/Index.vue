@@ -19,7 +19,7 @@
         },
         users: {
             type: Object
-        },
+        }
     })
 
     const filters = ref({
