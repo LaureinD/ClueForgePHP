@@ -3,9 +3,18 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 import { createPopper } from "@popperjs/core";
 
 const props = defineProps({
-    content: { type: String, default: null },
-    placement: { type: String, default: "top" },
-    offset: { type: Array, default: () => [0, 8] }
+    content: {
+      type: String,
+      default: null
+    },
+    placement: {
+      type: String,
+      default: "top"
+    },
+    offset: {
+      type: Array,
+      default: () => [0, 8]
+    }
 });
 
 const trigger = ref<HTMLElement | null>(null);
@@ -52,7 +61,7 @@ function hide() {
         <div
             ref="tooltip"
             v-show="isVisible"
-            class="min-w-32 z-50 p-3 bg-background text-xs rounded shadow-xl whitespace-normal max-w-xs overflow-hidden text-left"
+            class="min-w-32 z-50 p-3 bg-background text-xs rounded shadow-xl whitespace-normal max-w-xs overflow-hidden text-left border-2 border-surface"
         >
             <slot name="content">
                 {{ props.content }}

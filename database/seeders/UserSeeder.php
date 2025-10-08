@@ -20,7 +20,6 @@ class UserSeeder extends Seeder
                 'first_name' => 'Admin',
                 'last_name' => 'Admin',
                 'email' => 'admin@example.com',
-                'last_login' => now(),
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
                 'remember_token' => Str::random(10),
@@ -32,7 +31,6 @@ class UserSeeder extends Seeder
                 'first_name' => 'user',
                 'last_name' => 'user',
                 'email' => 'user@example.com',
-                'last_login' => now(),
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
                 'remember_token' => Str::random(10),
@@ -42,14 +40,14 @@ class UserSeeder extends Seeder
             ]
         ]);
 
-        User::factory(50)->create();
+        User::factory(50)->create()->each(function ($user) {
+            $user->assignRole('user');
+        });
+
         $admin = User::where('id',1)->first();
-        $admin->images()->create([
-            'path' => 'img/avatars/Laurein_Demeyere.png',
-            'alt' => 'admin avatar',
-            'type' => 'image/png',
-            'size' => 0,
-            'is_primary' => true,
-        ]);
+        $admin->assignRole('admin');
+
+        $user = User::where('id',2)->first();
+        $user->assignRole('user');
     }
 }

@@ -26,21 +26,28 @@ Route::prefix('/')->group(function () {
 });
 
 //  APP ROUTES
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::get('/app', function () { return inertia('backend/Dashboard'); })->name('app.dashboard');
 });
 
 // ADMIN ROUTES
-Route::middleware(['auth', 'verified'])->prefix('/admin')->group(function () {
-    Route::get('/', function () { return inertia('admin/Dashboard'); })->name('admin.dashboard');
+Route::middleware(['auth', 'verified', 'role:admin'])
+    ->prefix('/admin')
+    ->group(function () {
+        Route::get('/', function () { return inertia('admin/Dashboard'); })->name('admin.dashboard');
 
-    Route::prefix('/users')->group(function () {
-        Route::get('/', [UserController::class, 'index'])->name('users.index');
-        Route::delete('/bulk-delete', [UserController::class, 'bulkDelete'])->name('users.bulkDelete');
-        Route::post('/bulk-restore', [UserController::class, 'bulkRestore'])->name('users.bulkRestore');
-    });
+        Route::middleware(['permission:view.user'])
+            ->prefix('/users')
+            ->controller(UserController::class)
+            ->group(function () {
+                Route::get('/', 'index')->name('users.index');
+                Route::get('/create', 'create')->middleware(['permission:create.user'])->name('users.create');
+                Route::post('/create', 'store' )->middleware(['permission:create.user'])->name('users.create');
+                Route::post('/{user}/update', 'update')->middleware(['permission:update.user'])->name('users.update');
+                Route::delete('/{user}', 'delete')->middleware(['permission:delete.user'])->name('users.delete');
+                Route::post('/{user}/restore', 'restore')->middleware(['permission:restore.user'])->name('users.restore');
+                Route::post('/bulk-delete', 'bulkDelete')->middleware(['permission:delete.user'])->name('users.bulkDelete');
+                Route::post('/bulk-restore', 'bulkRestore')->middleware(['permission:restore.user'])->name('users.bulkRestore');
+        });
 });
-
-
-
 

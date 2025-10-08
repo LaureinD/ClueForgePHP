@@ -2,7 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Middleware;
 
@@ -36,28 +39,51 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user()?->load('avatar');
+
         return array_merge(parent::share($request), [
-            'auth.user' => function () use ($request) {
-                $user = $request->user();
-                if (!$user) return null;
+            'auth.user' => fn () => $user ? $user->only('id', 'first_name', 'last_name', 'email') : null,
+            'auth.avatar' => fn () => $user && $user->avatar && Storage::disk('public')->exists($user->avatar->path) ? $user->avatar->only('path', 'alt') : null,
+            'auth.permissions' => fn () => $user ? $user->getAllPermissions()->pluck('name')->toArray() : [],
 
-                return $user->only('id', 'first_name', 'last_name', 'email');
-            },
-            'auth.avatar' => function () use ($request) {
-                $user = $request->user();
-                if (!$user) return null;
-
-                $avatar = $user->avatar;
-                if (!$avatar || !Storage::disk('public')->exists($avatar->path)) return null;
-
-                return $avatar->only('path', 'alt');
-            },
             'flash' => [
                 'success' => fn() => $request->session()->get('success'),
                 'error' => fn() => $request->session()->get('error'),
                 'warning' => fn() => $request->session()->get('warning'),
                 'info' => fn() => $request->session()->get('info'),
-            ]
+            ],
+
+            'KPI' => function () {
+                $routeName = Route::current()?->getName();
+
+                if (str_starts_with($routeName, 'users')) {
+                    $now = Carbon::now();
+                    $last30Days = $now->copy()->subDays(30);
+                    $last6Months = $now->copy()->subMonths(6);
+
+                    $userCount = User::count();
+                    $newUserCount = User::where('created_at', '>=', $last30Days)
+                        ->count();
+                    $activeUserCount = User::where('last_login', '>=', $last30Days)
+                        ->count();
+                    $retentionBase = User::where('created_at', '>=', $last6Months)
+                        ->count();
+                    $retentionCount = User::where('created_at', '>=', $last6Months)
+                        ->whereRaw('last_login >= DATE_ADD(created_at, INTERVAL 14 DAY)')
+                        ->count();
+
+                    $retentionRate = $retentionBase > 0
+                        ? round(($retentionCount / $retentionBase) * 100, 1)
+                        : 0;
+
+                    return [
+                        'userCount' => $userCount,
+                        'newUserCount' => $newUserCount,
+                        'activeUserCount' => $activeUserCount,
+                        'retentionRate' => $retentionRate,
+                    ];
+                }
+            }
         ]);
     }
 }

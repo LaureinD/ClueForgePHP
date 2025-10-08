@@ -17,6 +17,8 @@ import {
     XCircleIcon,
     ExclamationTriangleIcon,
     TrashIcon,
+    PencilSquareIcon,
+    PlusIcon,
 } from "@heroicons/vue/24/outline/index.js";
 import {
     CheckCircleIcon as CheckCircleIconSolid,
@@ -70,6 +72,8 @@ import {sizeMap, strokeMap} from "@/utils/tailwindSizeMapping.js";
         'warning': ExclamationTriangleIcon,
         'warningSolid': ExclamationTriangleIconSolid,
         'trash': TrashIcon,
+        'pencilSquare': PencilSquareIcon,
+        'plus': PlusIcon,
     };
 
 </script>

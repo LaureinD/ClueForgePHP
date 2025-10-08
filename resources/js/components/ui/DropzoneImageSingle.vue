@@ -1,5 +1,5 @@
 <script setup>
-import {onBeforeUnmount, onMounted, ref} from "vue";
+import {onBeforeUnmount, onMounted, ref, watch} from "vue";
 
     const emit = defineEmits(["update:modelValue"])
     const props = defineProps({
@@ -17,50 +17,35 @@ import {onBeforeUnmount, onMounted, ref} from "vue";
         }
     });
 
+    const dropzone = ref(null);
+    const input = ref(null);
     const preview = ref(null);
     const errorMessage = ref(null);
 
     onMounted(() => {
-        const dropzone = document.querySelector('#dropzone');
-        const input = document.querySelector('#imageInput');
-
-        dropzone.addEventListener('click', function() {
-            input.click();
-        })
-
-        dropzone.addEventListener('dragover', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-        })
-
-        dropzone.addEventListener('drop', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            handleDrop(event);
-        })
+        dropzone.value.addEventListener('click', handleClick)
+        dropzone.value.addEventListener('dragover', handleDragOver)
+        dropzone.value.addEventListener('drop', handleDrop)
     });
 
     onBeforeUnmount(() => {
-        const dropzone = document.querySelector('#dropzone');
-        const input = document.querySelector('#imageInput');
-
-        dropzone.removeEventListener('click', function() {
-            input.click();
-        })
-
-        dropzone.removeEventListener('dragover', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-        })
-
-        dropzone.addEventListener('drop', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            handleDrop(event);
-        })
+        dropzone.value.removeEventListener('click', handleClick)
+        dropzone.value.removeEventListener('dragover', handleDragOver)
+        dropzone.value.removeEventListener('drop', handleDrop)
     })
 
+    const handleClick = (event) => {
+        input.value.click();
+    }
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
     function handleDrop(event) {
+        event.preventDefault();
+        event.stopPropagation();
         handleFile(event.dataTransfer.files[0]);
     }
 
@@ -69,13 +54,15 @@ import {onBeforeUnmount, onMounted, ref} from "vue";
     };
 
     function handleFile(file) {
-        if (file && file.type.startsWith('image/')) {
-            preview.value = URL.createObjectURL(file);
-            emit('update:modelValue', file);
-        }
+        if (!file) return
 
-        if (validateImage(file)) {
-            emit('update:modelValue', file);
+        if (!validateImage(file)) return
+
+        preview.value = URL.createObjectURL(file);
+        emit('update:modelValue', file);
+
+        if (input.value) {
+            input.value.value = '';
         }
     }
 
@@ -88,6 +75,7 @@ import {onBeforeUnmount, onMounted, ref} from "vue";
             return false;
         }
 
+        errorMessage.value = null;
         return true;
     }
 
@@ -95,13 +83,17 @@ import {onBeforeUnmount, onMounted, ref} from "vue";
         preview.value = null;
         errorMessage.value = null;
         emit('update:modelValue', null);
+
+        if (input.value) {
+            input.value.value = '';
+        }
     }
 
 </script>
 
 <template>
     <div class="relative flex flex-col items-center">
-        <div id="dropzone" :class="`h-${props.size} w-${props.size} rounded${props.rounded?'-'+props.rounded:''}`" class="flex items-center justify-center bg-background border border-secondary border-dashed text-secondary hover:cursor-pointer overflow-hidden">
+        <div ref="dropzone" :class="`h-${props.size} w-${props.size} rounded${props.rounded?'-'+props.rounded:''}`" class="flex items-center justify-center bg-background border border-secondary border-dashed text-secondary hover:cursor-pointer overflow-hidden">
             <div v-if="!preview" class="flex flex-col gap-y-4 items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" :class="`size-${props.iconSize}`">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
@@ -117,6 +109,6 @@ import {onBeforeUnmount, onMounted, ref} from "vue";
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
         </button>
-        <input @change="handleChangeFile" id="imageInput" type="file" class="hidden">
+        <input @change="handleChangeFile" ref="input" type="file" class="hidden">
     </div>
 </template>

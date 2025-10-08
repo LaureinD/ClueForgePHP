@@ -7,6 +7,7 @@ import { ZiggyVue } from "../../vendor/tightenco/ziggy"
 import FrontendLayout from "@/layouts/FrontendLayout.vue";
 import BackendLayout from "@/layouts/BackendLayout.vue";
 import AdminLayout from "@/layouts/AdminLayout.vue";
+import AdminUserLayout from "@/layouts/AdminUserLayout.vue";
 
 createInertiaApp({
     resolve: async(name) => {
@@ -17,7 +18,13 @@ createInertiaApp({
             page.default.layout = page.default.layout || BackendLayout;
 
         } else if (name.startsWith('admin/')) {
-            page.default.layout = page.default.layout || AdminLayout;
+
+            if (name.startsWith('admin/users/')) {
+                page.default.layout = page.default.layout || AdminUserLayout
+
+            } else {
+                page.default.layout = page.default.layout || AdminLayout
+            }
 
         } else {
             page.default.layout = page.default.layout || FrontendLayout;

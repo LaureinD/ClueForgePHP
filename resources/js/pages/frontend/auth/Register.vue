@@ -40,11 +40,12 @@
         <button @click="console.log(form)">Log</button>
 
         <form @submit.prevent="submitRegisterForm" class="flex flex-col gap-y-4 max-w-lg mx-auto mb-20">
+            <!--            CSRF protection included bij Inertia useform()-->
+
             <div class="flex flex-col items-center">
                 <DropzoneSingleImage v-model="form.avatar" rounded="full" />
                 <p v-if="form.errors.avatar" class="text-danger text-sm">{{ form.errors.avatar }}</p>
             </div>
-<!--            CSRF protection included bij Inertia useform()-->
             <div class="grid grid-cols-2 gap-3">
                 <TextInput v-model="form.first_name" name="First Name" type="text" autocomplete="given-name" required :message="form.errors.first_name" />
                 <TextInput v-model="form.last_name" name="Last Name" type="text" autocomplete="family-name" required :message="form.errors.last_name" />

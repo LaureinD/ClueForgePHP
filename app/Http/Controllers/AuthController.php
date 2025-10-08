@@ -29,6 +29,7 @@ class AuthController extends Controller
         $fields['last_name'] = ucfirst(strtolower($fields['last_name']));
 
         $user = User::create($fields);
+        $user->assignRole('user');
 
         $file = $request->file('avatar');
         if ($file) {
@@ -49,7 +50,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         return redirect()
-                ->route('admin.dashboard')
+                ->route('app.dashboard')
                 ->with('success',['message' => "Welcome $user->first_name, \n Your account was created successfully!",]);
     }
 
@@ -62,18 +63,12 @@ class AuthController extends Controller
         if (Auth::attempt($fields, $request->rememberMe)) {
             $request->session()->regenerate();
 
-            //todo: add proper role/permission check
-            if (Auth()->user()?->id === 1) {
-                return redirect()
-                        ->route('admin.dashboard')
-                        ->with('success',['message' => "Welcome ".Auth()->user()?->first_name.", \n Successfully logged in to the admin panel!",]);
+            $user = Auth()->user();
+            if (!$user) return redirect()->route('home');
 
-            } else {
-                return redirect()
-                        ->route('app.dashboard')
-                        ->with('success',['message' => "Welcome ".Auth()->user()?->first_name.", \n Successfully logged in to ClueForge!",]);
-
-            }
+            return redirect()
+                    ->intended($user->hasRole('admin') ? route('admin.dashboard') : route('app.dashboard'))
+                    ->with('success',['message' => "Welcome ".$user->first_name.", \n Successfully logged in to ClueForge!",]);
         }
 
         return back()->withErrors(['email' => 'The provided credentials don\'t match our records.'])->onlyInput('email');
